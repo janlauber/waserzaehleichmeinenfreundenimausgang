@@ -129,9 +129,12 @@
   }
 
   .modal {
-    background: var(--bg-primary);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     max-width: 420px;
     width: 100%;
     padding: 2rem;
@@ -240,15 +243,15 @@
 
   .btn-submit {
     width: 100%;
-    padding: 0.875rem;
-    background: var(--accent);
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: 12px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,9 +259,8 @@
   }
 
   .btn-submit:hover:not(:disabled) {
-    background: var(--accent-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
   }
 
   .btn-submit:active:not(:disabled) {
@@ -268,6 +270,17 @@
   .btn-submit:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  @media (hover: none) {
+    .btn-submit:hover:not(:disabled) {
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .btn-submit:active:not(:disabled) {
+      opacity: 0.9;
+    }
   }
 
   .spinner {

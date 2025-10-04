@@ -62,20 +62,31 @@
   .fact-card {
     width: 100%;
     max-width: 600px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-xl);
     padding: 2rem;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     gap: 2rem;
     min-height: 280px;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   
   .fact-card:hover {
-    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (hover: none) {
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: none;
+    }
   }
   
   .fact-body {
@@ -88,7 +99,7 @@
   .fact-text {
     font-size: 1.5rem;
     line-height: 1.5;
-    color: var(--text-primary);
+    color: white;
     text-align: center;
     margin: 0;
     font-weight: 500;
@@ -109,10 +120,11 @@
   
   .author-name {
     font-size: 0.9375rem;
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
     padding: 0.375rem 0.875rem;
-    background: var(--bg-secondary);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-sm);
   }
   
@@ -129,25 +141,40 @@
     gap: 0.625rem;
     padding: 0.75rem 1.25rem;
     border-radius: var(--radius-md);
-    border: 1.5px solid var(--border);
-    background: var(--bg-primary);
-    color: var(--text-secondary);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
     font-weight: 600;
     font-size: 1rem;
     min-width: 90px;
     justify-content: center;
   }
   
-  .vote-btn:hover {
-    border-color: var(--text-tertiary);
+  .vote-btn:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   
-  .vote-btn:active {
+  .vote-btn:active:not(:disabled) {
     transform: translateY(0);
+  }
+
+  @media (hover: none) {
+    .vote-btn:hover:not(:disabled) {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .vote-btn:active:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
   }
   
   .vote-btn:disabled {
@@ -156,15 +183,15 @@
   }
   
   .vote-btn.upvote.active {
-    background: var(--success-light);
-    border-color: var(--success);
-    color: var(--success);
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    color: #10b981;
   }
   
   .vote-btn.downvote.active {
-    background: var(--danger-light);
-    border-color: var(--danger);
-    color: var(--danger);
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #ef4444;
   }
   
   .vote-count {
@@ -177,9 +204,9 @@
     width: 100%;
     text-align: center;
     padding: 0.875rem 1.25rem;
-    background: var(--accent-light);
-    color: var(--accent);
-    border: 1.5px solid var(--accent);
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
     border-radius: var(--radius-md);
     font-weight: 600;
     font-size: 0.9375rem;

@@ -25,103 +25,124 @@
   <div class="content">
     <div class="stats-grid">
       <div class="stat-card">
-        <FileText size={24} strokeWidth={2} color="var(--accent)" />
+        <FileText size={28} strokeWidth={2} />
         <div class="stat-value">{data.total_facts}</div>
         <div class="stat-label">Fakten</div>
       </div>
       
       <div class="stat-card">
-        <Users size={24} strokeWidth={2} color="var(--accent)" />
+        <Users size={28} strokeWidth={2} />
         <div class="stat-value">{data.total_users}</div>
         <div class="stat-label">Benutzer</div>
       </div>
       
       <div class="stat-card">
-        <ThumbsUp size={24} strokeWidth={2} color="var(--success)" />
+        <ThumbsUp size={28} strokeWidth={2} />
         <div class="stat-value">{data.total_votes}</div>
         <div class="stat-label">Votes</div>
       </div>
       
       <div class="stat-card">
-        <TrendingUp size={24} strokeWidth={2} color="var(--accent)" />
+        <TrendingUp size={28} strokeWidth={2} />
         <div class="stat-value">{data.avg_score.toFixed(1)}</div>
         <div class="stat-label">Ø Score</div>
       </div>
     </div>
-    
-    <div class="vote-breakdown">
-      <div class="breakdown-header">
-        <h3>Vote Verteilung</h3>
-        <span class="percentage">{upvoteRate}% positiv</span>
-      </div>
-      <div class="breakdown-bar">
-        <div class="bar-segment upvotes" style="width: {upvoteRate}%">
-          <ThumbsUp size={16} strokeWidth={2} />
-          <span>{data.votes_breakdown.upvotes}</span>
+
+    <div class="section">
+      <h3>Vote Verteilung</h3>
+      <div class="vote-breakdown">
+        <div class="vote-stats">
+          <div class="vote-stat upvote">
+            <ThumbsUp size={20} strokeWidth={2} />
+            <span class="vote-number">{data.votes_breakdown.upvotes}</span>
+            <span class="vote-label">Upvotes</span>
+          </div>
+          <div class="vote-stat downvote">
+            <ThumbsDown size={20} strokeWidth={2} />
+            <span class="vote-number">{data.votes_breakdown.downvotes}</span>
+            <span class="vote-label">Downvotes</span>
+          </div>
         </div>
-        <div class="bar-segment downvotes" style="width: {100 - upvoteRate}%">
-          <ThumbsDown size={16} strokeWidth={2} />
-          <span>{data.votes_breakdown.downvotes}</span>
+        <div class="vote-bar">
+          <div class="vote-bar-fill" style="width: {upvoteRate}%"></div>
         </div>
+        <div class="vote-percentage">{upvoteRate}% positiv</div>
       </div>
     </div>
-    
+
     {#if data.top_fact}
-      <section class="section">
+      <div class="section">
         <div class="section-header">
-          <Crown size={20} strokeWidth={2} color="var(--accent)" />
-          <h2>Top Fakt</h2>
+          <Crown size={24} strokeWidth={2} />
+          <h3>Top Fakt</h3>
         </div>
-        <div class="fact-card highlight">
+        <div class="feature-card">
           <p class="fact-text">{data.top_fact.content}</p>
-          <div class="fact-meta">
-            <span class="author">{data.top_fact.author_name}</span>
-            <span class="score positive">
+          <div class="fact-footer">
+            <span class="fact-author">{data.top_fact.author_name}</span>
+            <span class="fact-score positive">
               {data.top_fact.upvotes - data.top_fact.downvotes} Punkte
             </span>
           </div>
         </div>
-      </section>
+      </div>
     {/if}
-    
-    {#if data.trending_facts.length > 0}
-      <section class="section">
+
+    {#if data.most_active_users.length > 0}
+      <div class="section">
         <div class="section-header">
-          <Flame size={20} strokeWidth={2} color="#ff6b35" />
-          <h2>Trending (24h)</h2>
+          <Users size={24} strokeWidth={2} />
+          <h3>Aktivste Benutzer</h3>
         </div>
-        <div class="facts-list">
-          {#each data.trending_facts as fact}
-            <div class="fact-card">
-              <p class="fact-text">{fact.content}</p>
-              <div class="fact-meta">
-                <span class="author">{fact.author_name}</span>
-                <span 
-                  class="score" 
-                  class:positive={fact.upvotes - fact.downvotes > 0} 
-                  class:negative={fact.upvotes - fact.downvotes < 0}
-                >
-                  {fact.upvotes - fact.downvotes > 0 ? '+' : ''}{fact.upvotes - fact.downvotes}
-                </span>
+        <div class="users-list">
+          {#each data.most_active_users as user, i}
+            <div class="user-item">
+              <div class="user-rank">#{i + 1}</div>
+              <div class="user-info">
+                <div class="user-name">{user.author_name}</div>
+                <div class="user-stats">{user.fact_count} Fakten • {user.total_votes} Votes</div>
               </div>
             </div>
           {/each}
         </div>
-      </section>
+      </div>
     {/if}
-    
-    {#if data.controversial_facts.length > 0}
-      <section class="section">
+
+    {#if data.trending_facts.length > 0}
+      <div class="section">
         <div class="section-header">
-          <Zap size={20} strokeWidth={2} color="#9333ea" />
-          <h2>Kontrovers</h2>
+          <Flame size={24} strokeWidth={2} />
+          <h3>Trending (24h)</h3>
         </div>
-        <div class="facts-list">
-          {#each data.controversial_facts as fact}
-            <div class="fact-card">
-              <p class="fact-text">{fact.content}</p>
+        <ul class="facts-list">
+          {#each data.trending_facts as fact}
+            <li class="fact-item">
+              <div class="fact-content">{fact.content}</div>
               <div class="fact-meta">
-                <span class="author">{fact.author_name}</span>
+                <span class="fact-author">{fact.author_name}</span>
+                <span class="fact-score" class:positive={fact.upvotes - fact.downvotes > 0}>
+                  {fact.upvotes - fact.downvotes > 0 ? '+' : ''}{fact.upvotes - fact.downvotes}
+                </span>
+              </div>
+            </li>
+          {/each}
+        </ul>
+      </div>
+    {/if}
+
+    {#if data.controversial_facts.length > 0}
+      <div class="section">
+        <div class="section-header">
+          <Zap size={24} strokeWidth={2} />
+          <h3>Kontrovers</h3>
+        </div>
+        <ul class="facts-list">
+          {#each data.controversial_facts as fact}
+            <li class="fact-item">
+              <div class="fact-content">{fact.content}</div>
+              <div class="fact-meta">
+                <span class="fact-author">{fact.author_name}</span>
                 <div class="vote-split">
                   <span class="vote-item upvote">
                     <ThumbsUp size={14} strokeWidth={2} />
@@ -133,56 +154,32 @@
                   </span>
                 </div>
               </div>
-            </div>
+            </li>
           {/each}
-        </div>
-      </section>
+        </ul>
+      </div>
     {/if}
-    
-    {#if data.most_active_users.length > 0}
-      <section class="section">
-        <div class="section-header">
-          <Users size={20} strokeWidth={2} color="var(--accent)" />
-          <h2>Aktivste Benutzer</h2>
-        </div>
-        <div class="users-list">
-          {#each data.most_active_users as user, i}
-            <div class="user-card">
-              <div class="user-rank">{i + 1}</div>
-              <div class="user-info">
-                <span class="user-name">{user.author_name}</span>
-                <span class="user-stats">{user.fact_count} Fakten • {user.total_votes} Votes</span>
-              </div>
-            </div>
-          {/each}
-        </div>
-      </section>
-    {/if}
-    
+
     {#if data.recent_facts.length > 0}
-      <section class="section">
+      <div class="section">
         <div class="section-header">
-          <FileText size={20} strokeWidth={2} color="var(--accent)" />
-          <h2>Neueste Fakten</h2>
+          <FileText size={24} strokeWidth={2} />
+          <h3>Neueste Fakten</h3>
         </div>
-        <div class="facts-list">
+        <ul class="facts-list">
           {#each data.recent_facts as fact}
-            <div class="fact-card">
-              <p class="fact-text">{fact.content}</p>
+            <li class="fact-item">
+              <div class="fact-content">{fact.content}</div>
               <div class="fact-meta">
-                <span class="author">{fact.author_name}</span>
-                <span 
-                  class="score" 
-                  class:positive={fact.upvotes - fact.downvotes > 0} 
-                  class:negative={fact.upvotes - fact.downvotes < 0}
-                >
+                <span class="fact-author">{fact.author_name}</span>
+                <span class="fact-score" class:positive={fact.upvotes - fact.downvotes > 0} class:negative={fact.upvotes - fact.downvotes < 0}>
                   {fact.upvotes - fact.downvotes > 0 ? '+' : ''}{fact.upvotes - fact.downvotes}
                 </span>
               </div>
-            </div>
+            </li>
           {/each}
-        </div>
-      </section>
+        </ul>
+      </div>
     {/if}
   </div>
 </div>
@@ -190,341 +187,399 @@
 <style>
   .page {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: var(--bg-primary);
-    padding-bottom: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
   }
-  
+
   .nav-bar {
     position: sticky;
     top: 0;
-    z-index: 50;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-light);
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
+
   .nav-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.875rem 1rem;
-    max-width: 800px;
-    margin: 0 auto;
+    gap: 1rem;
   }
-  
+
   .back-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    border: none;
-    border-radius: var(--radius-md);
-    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
     text-decoration: none;
-    transition: var(--transition);
+    transition: all 0.2s ease;
   }
-  
+
   .back-btn:hover {
-    background: var(--bg-secondary);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
   }
-  
-  .back-btn:active {
-    transform: scale(0.95);
+
+  @media (hover: none) {
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: none;
+    }
+    
+    .back-btn:active {
+      background: rgba(255, 255, 255, 0.2);
+    }
   }
-  
+
   h1 {
+    font-size: 1.125rem;
+    font-weight: 600;
     margin: 0;
-    color: var(--text-primary);
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
   }
-  
+
   .spacer {
-    width: 44px;
+    width: 40px;
   }
-  
+
   .content {
-    padding: 1.5rem 1rem;
-    max-width: 800px;
+    max-width: 640px;
     margin: 0 auto;
-    width: 100%;
+    padding: 2rem 1.5rem 4rem;
   }
-  
+
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
   }
-  
+
   .stat-card {
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
     text-align: center;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.625rem;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
-  
+
   .stat-card:hover {
-    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
   }
-  
+
+  @media (hover: none) {
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: none;
+    }
+  }
+
   .stat-value {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
+    margin: 0.75rem 0 0.25rem;
     line-height: 1;
   }
-  
+
   .stat-label {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    opacity: 0.9;
     font-weight: 500;
   }
-  
-  .vote-breakdown {
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: var(--shadow-sm);
-  }
-  
-  .breakdown-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .breakdown-header h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-  
-  .percentage {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--success);
-  }
-  
-  .breakdown-bar {
-    display: flex;
-    height: 48px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background: var(--bg-secondary);
-  }
-  
-  .bar-segment {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    color: white;
-    transition: var(--transition);
-  }
-  
-  .bar-segment.upvotes {
-    background: var(--success);
-  }
-  
-  .bar-segment.downvotes {
-    background: var(--danger);
-  }
-  
+
   .section {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
-  
+
+  .section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+  }
+
   .section-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.625rem;
     margin-bottom: 1rem;
   }
-  
-  .section-header h2 {
-    font-size: 1.125rem;
-    font-weight: 700;
+
+  .section-header h3 {
     margin: 0;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
   }
-  
-  .facts-list {
+
+  .vote-breakdown {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+
+  .vote-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+  }
+
+  .vote-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .vote-stat.upvote {
+    color: #10b981;
+  }
+
+  .vote-stat.downvote {
+    color: #ef4444;
+  }
+
+  .vote-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .vote-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+  }
+
+  .vote-bar {
+    height: 12px;
+    background: rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  .vote-bar-fill {
+    height: 100%;
+    background: rgba(16, 185, 129, 0.8);
+    transition: width 0.3s ease;
+  }
+
+  .vote-percentage {
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .feature-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (hover: none) {
+    .feature-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: none;
+    }
+  }
+
+  .fact-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 1rem;
+  }
+
+  .fact-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .fact-author {
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.25rem 0.625rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+  }
+
+  .fact-score {
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.25rem 0.625rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+  }
+
+  .fact-score.positive {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.2);
+  }
+
+  .fact-score.negative {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.2);
+  }
+
+  .users-list {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
-  
-  .fact-card {
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
+
+  .user-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.2s ease;
   }
-  
-  .fact-card:hover {
-    box-shadow: var(--shadow-md);
+
+  .user-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
   }
-  
-  .fact-card.highlight {
-    border-color: var(--accent);
-    border-width: 2px;
-    background: var(--accent-light);
+
+  @media (hover: none) {
+    .user-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: none;
+    }
   }
-  
-  .fact-text {
+
+  .user-rank {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-weight: 700;
     font-size: 1rem;
-    line-height: 1.5;
-    color: var(--text-primary);
-    margin: 0 0 0.75rem;
-    font-weight: 500;
   }
-  
+
+  .user-info {
+    flex: 1;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .user-stats {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .facts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .fact-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .fact-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+  }
+
+  @media (hover: none) {
+    .fact-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: none;
+    }
+  }
+
+  .fact-content {
+    font-size: 0.938rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
   .fact-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.875rem;
-    gap: 0.75rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.875rem;
   }
-  
-  .author {
-    font-weight: 500;
-    color: var(--text-secondary);
-    background: var(--bg-secondary);
-    padding: 0.25rem 0.625rem;
-    border-radius: var(--radius-sm);
-  }
-  
-  .score {
-    font-weight: 600;
-    color: var(--text-primary);
-    padding: 0.25rem 0.625rem;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-sm);
-  }
-  
-  .score.positive {
-    color: var(--success);
-    background: var(--success-light);
-  }
-  
-  .score.negative {
-    color: var(--danger);
-    background: var(--danger-light);
-  }
-  
+
   .vote-split {
     display: flex;
     gap: 0.5rem;
   }
-  
+
   .vote-item {
     display: flex;
     align-items: center;
     gap: 0.25rem;
     padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-sm);
+    border-radius: 6px;
     font-weight: 600;
     font-size: 0.8125rem;
   }
-  
+
   .vote-item.upvote {
-    background: var(--success-light);
-    color: var(--success);
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
   }
-  
+
   .vote-item.downvote {
-    background: var(--danger-light);
-    color: var(--danger);
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
   }
-  
-  .users-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-  }
-  
-  .user-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-  }
-  
-  .user-card:hover {
-    box-shadow: var(--shadow-md);
-  }
-  
-  .user-rank {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--accent-light);
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.125rem;
-  }
-  
-  .user-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  
-  .user-name {
-    font-weight: 600;
-    color: var(--text-primary);
-    font-size: 0.9375rem;
-  }
-  
-  .user-stats {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-  }
-  
+
   @media (min-width: 768px) {
     .content {
-      padding: 2rem 1.5rem;
+      padding: 3rem 1.5rem 4rem;
     }
-    
+
     .stats-grid {
-      gap: 1.5rem;
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 </style>

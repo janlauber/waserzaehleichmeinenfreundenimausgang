@@ -1,4 +1,4 @@
-# 🍺 Waserzähleichmeinenfreundenimausgang
+# 🎲 Waserzähleichmeinenfreundenimausgang
 
 Web-App zum Teilen und Bewerten von zufälligen Fakten.
 

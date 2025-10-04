@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  faktenschleuder:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - DB_PATH=/app/data/facts.db
+      - PORT=3000
+    restart: unless-stopped
+

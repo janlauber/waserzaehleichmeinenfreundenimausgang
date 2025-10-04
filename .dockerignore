@@ -1,0 +1,12 @@
+node_modules
+.svelte-kit
+build
+data
+.git
+.github
+.env
+.env.local
+*.md
+.vscode
+.idea
+helm

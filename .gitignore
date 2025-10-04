@@ -12,4 +12,5 @@ data/
 *.db
 *.db-shm
 *.db-wal
-
+values.production.yaml
+DEPLOY.md

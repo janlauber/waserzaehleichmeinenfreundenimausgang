@@ -78,7 +78,7 @@
         data = {
           ...data,
           facts: data.facts.filter(f => f.created_by_session !== sessionId),
-          users: data.users.filter(u => u.session_id !== sessionId)
+          sessions: data.sessions.filter(s => s.session_id !== sessionId)
         };
       }
     } catch (error) {
@@ -468,7 +468,7 @@
               {#each data.users.slice(0, 5) as user, i}
                 <div class="list-item">
                   <span class="rank">#{i + 1}</span>
-                  <span class="list-text">{user.session_id.substring(0, 12)}...</span>
+                  <span class="list-text">{user.author_name}</span>
                   <span class="list-score">{user.fact_count}</span>
                 </div>
               {/each}

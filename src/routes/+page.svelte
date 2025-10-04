@@ -5,6 +5,7 @@
   import CreateFactModal from '$lib/components/CreateFactModal.svelte';
   import WelcomeModal from '$lib/components/WelcomeModal.svelte';
   import { BarChart3, Plus, Shuffle } from 'lucide-svelte';
+  import { version } from '../../package.json';
 
   let { data }: { data: PageData } = $props();
 
@@ -195,6 +196,10 @@
   {#if showWelcomeModal}
     <WelcomeModal onusernamesaved={handleUsernameSaved} />
   {/if}
+
+  <div class="version-badge">
+    v{version}
+  </div>
 </div>
 
 <style>
@@ -373,9 +378,31 @@
     transform: translateY(0);
   }
 
+  .version-badge {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.375rem 0.75rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    z-index: 10;
+    transition: all 0.3s ease;
+  }
+
   @media (min-width: 768px) {
     .fact-container {
       padding: 3rem 1.5rem;
+    }
+    
+    .version-badge {
+      bottom: 1.5rem;
+      right: 1.5rem;
     }
   }
 </style>

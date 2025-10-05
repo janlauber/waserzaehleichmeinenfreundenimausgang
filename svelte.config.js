@@ -4,8 +4,7 @@ export default {
   kit: {
     adapter: adapter({
       out: 'build',
-      precompress: false,
-      envPrefix: ''
+      precompress: true
     })
   }
 };

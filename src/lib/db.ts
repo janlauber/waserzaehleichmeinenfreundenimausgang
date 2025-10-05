@@ -3,14 +3,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { existsSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 
+const DEBUG = process.env.DEBUG === 'true';
 const dbPath = process.env.DB_PATH || './data/facts.db';
 const dbDir = dirname(dbPath);
 
 if (!existsSync(dbDir)) {
+  if (DEBUG) console.log(`[DB] Creating directory: ${dbDir}`);
   mkdirSync(dbDir, { recursive: true });
 }
 
+if (DEBUG) console.log(`[DB] Opening database at: ${dbPath}`);
+const dbStartTime = Date.now();
 const db = new Database(dbPath);
+if (DEBUG) console.log(`[DB] Database opened in ${Date.now() - dbStartTime}ms`);
 
 db.pragma('journal_mode = WAL');
 db.pragma('synchronous = NORMAL');
@@ -66,6 +71,7 @@ export interface Vote {
 }
 
 export function createFact(content: string, authorName: string, sessionId: string): Fact {
+  const startTime = Date.now();
   const id = uuidv4();
   const createdAt = Date.now();
   
@@ -75,6 +81,7 @@ export function createFact(content: string, authorName: string, sessionId: strin
   `);
   
   stmt.run(id, content, authorName, sessionId, createdAt);
+  if (DEBUG) console.log(`[DB] createFact - ${Date.now() - startTime}ms`);
   
   return {
     id,
@@ -88,6 +95,7 @@ export function createFact(content: string, authorName: string, sessionId: strin
 }
 
 export function getRandomFacts(limit: number, sessionId: string): Fact[] {
+  const startTime = Date.now();
   const stmt = db.prepare(`
     SELECT 
       f.*,
@@ -98,7 +106,9 @@ export function getRandomFacts(limit: number, sessionId: string): Fact[] {
     LIMIT ?
   `);
   
-  return stmt.all(sessionId, limit) as Fact[];
+  const result = stmt.all(sessionId, limit) as Fact[];
+  if (DEBUG) console.log(`[DB] getRandomFacts(${limit}) - ${Date.now() - startTime}ms - returned ${result.length} facts`);
+  return result;
 }
 
 export function getFact(id: string, sessionId: string): Fact | undefined {
@@ -115,6 +125,7 @@ export function getFact(id: string, sessionId: string): Fact | undefined {
 }
 
 export function vote(factId: string, sessionId: string, voteType: 'up' | 'down'): boolean {
+  const startTime = Date.now();
   const existingVote = db.prepare('SELECT vote_type FROM votes WHERE session_id = ? AND fact_id = ?')
     .get(sessionId, factId) as { vote_type: string } | undefined;
   
@@ -147,6 +158,7 @@ export function vote(factId: string, sessionId: string, voteType: 'up' | 'down')
   });
   
   transaction();
+  if (DEBUG) console.log(`[DB] vote(${voteType}) - ${Date.now() - startTime}ms`);
   return true;
 }
 

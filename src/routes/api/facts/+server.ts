@@ -3,11 +3,18 @@ import { createFact, getRandomFacts } from '$lib/db';
 import { getOrCreateSession } from '$lib/session';
 import type { RequestHandler } from './$types';
 
+const DEBUG = process.env.DEBUG === 'true';
+
 export const GET: RequestHandler = ({ url, cookies }) => {
+  const startTime = Date.now();
+  if (DEBUG) console.log('[API] GET /api/facts');
+  
   const sessionId = getOrCreateSession(cookies);
   const limit = parseInt(url.searchParams.get('limit') || '10');
   
   const facts = getRandomFacts(Math.min(limit, 50), sessionId);
+  
+  if (DEBUG) console.log(`[API] GET /api/facts completed in ${Date.now() - startTime}ms`);
   return json(facts);
 };
 

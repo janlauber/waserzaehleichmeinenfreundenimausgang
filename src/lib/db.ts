@@ -39,8 +39,12 @@ db.exec(`
   );
 
   CREATE INDEX IF NOT EXISTS idx_facts_created_at ON facts(created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_facts_upvotes ON facts(upvotes DESC);
+  CREATE INDEX IF NOT EXISTS idx_facts_author ON facts(author_name);
+  CREATE INDEX IF NOT EXISTS idx_facts_session ON facts(created_by_session);
   CREATE INDEX IF NOT EXISTS idx_votes_session ON votes(session_id);
   CREATE INDEX IF NOT EXISTS idx_votes_fact ON votes(fact_id);
+  CREATE INDEX IF NOT EXISTS idx_votes_created_at ON votes(created_at DESC);
 `);
 
 export interface Fact {

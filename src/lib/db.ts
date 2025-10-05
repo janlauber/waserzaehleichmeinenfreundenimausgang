@@ -13,6 +13,10 @@ if (!existsSync(dbDir)) {
 const db = new Database(dbPath);
 
 db.pragma('journal_mode = WAL');
+db.pragma('synchronous = NORMAL');
+db.pragma('cache_size = -64000');
+db.pragma('temp_store = MEMORY');
+db.pragma('mmap_size = 30000000000');
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS facts (
